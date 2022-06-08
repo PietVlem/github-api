@@ -1,0 +1,49 @@
+/**
+ * components/typography.css
+ *
+ * Typography rules.
+ *
+ */
+
+body {
+    @apply font-sans leading-normal;
+}
+
+/*
+Headings
+*/
+h1 {}
+h2 {}
+h3 {}
+h4 {}
+h5 {}
+h6 {}
+
+/*
+Body text
+*/
+
+
+/*
+Lists
+*/
+ul { list-style: disc; }
+
+ol { list-style: decimal; }
+
+ul, ol {
+    @apply pl-6;
+    &:not(:last-child) { @apply pb-4; }
+}
+
+/*
+Other
+*/
+a {
+    @apply outline-none;
+}
+
+
+.rte {
+    
+}
