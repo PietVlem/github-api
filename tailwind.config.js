@@ -11,6 +11,9 @@ module.exports = {
           'sans-serif'
         ],
       },
+      fontSize: {
+        'xxs': toRem(10), 
+      },
       gridColumn: {
         'span-full': 'full',
         'span-main': 'main',

@@ -10,8 +10,34 @@
 @import "global/form.pcss";
 
 /* Components */
+@import "components/repo-list.pcss";
 
 @import 'tailwindcss/utilities';
 
-/* Pages */
+/* Layouts */
+@import "layout/app.pcss";
+@import "layout/content-layout.pcss";
 
+/* Views */
+@import "layout/app.pcss";
+
+
+/* Include settings via @layer. */
+@layer components {
+    /* Default Transitions */
+    .dt-colors {
+        @apply transition-colors duration-200;
+    }
+
+    .dt-opacity {
+        @apply transition-opacity duration-200;
+    }
+
+    .dt-transform {
+        @apply transition-transform duration-200;
+    }
+
+    .dt-all {
+        @apply transition-all duration-200;
+    }
+}

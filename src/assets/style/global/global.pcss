@@ -2,6 +2,19 @@ html {
     @apply scroll-smooth;
 }
 
-body {
-    
+#app {
+    @apply flex flex-col h-screen;
+}
+
+.footer, .header {
+    @apply bg-slate-700 text-white text-center;
+
+    &__inner-wrapper {
+        @apply col-span-main py-4;
+    }
+}
+
+.site-body {
+    @apply flex-1 my-16;
+    @apply nm:my-24;
 }
