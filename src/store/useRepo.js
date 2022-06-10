@@ -4,12 +4,11 @@ export const useRepoStore = defineStore('repo', {
   state: () => ({
     repos: [],
     repo: null,
+    repoCommits: [],
     loading: false,
     error: null
   }),
-  getters: {
-    allRepos: state => state.repos,
-  },
+  getters: {},
   actions: {
     async fetchRepos() {
       this.repos = []
@@ -23,8 +22,19 @@ export const useRepoStore = defineStore('repo', {
         this.loading = false
       }
     },
-    fetchActiveRepo(id) {
-      this.repo = this.repos[id]
-    }
+    async fetchActiveRepoData(name) {
+      this.repo = []
+      this.loading = true
+      try {
+        this.repo = await fetch(`https://api.github.com/repos/PietVlem/${name}`)
+        .then((response) => response.json()) 
+        this.repoCommits = await fetch(`https://api.github.com/repos/PietVlem/${name}/commits?per_page=20`)
+        .then((response) => response.json())
+      } catch (error) {
+        this.error = error
+      } finally {
+        this.loading = false
+      }
+    },
   },
 })

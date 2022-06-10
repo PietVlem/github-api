@@ -2,20 +2,17 @@
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProfileStore } from '@/store/useProfile'
-import { useRepoStore } from '@/store/useRepo'
 import SiteLayout from '@/layouts/SiteLayout.vue'
 
 // Define stores
 const profileStore = useProfileStore()
-const repoStore = useRepoStore()
 
 // Define data stores
 const { profile } = storeToRefs(profileStore)
 
 onMounted(() => {
-  // Get Data
+  // Get data
   profileStore.fetchProfile()
-  repoStore.fetchRepos()
 }) 
 </script>
 
@@ -27,10 +24,6 @@ onMounted(() => {
         <h2>{{ profile.login }}</h2>
         <p>{{ profile.bio }}</p>
       </div>
-    </div>
-
-    <div class="col-span-main">
-      <div>breadcrumb</div>
     </div>
 
     <div class="page-content">

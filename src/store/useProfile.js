@@ -6,9 +6,7 @@ export const useProfileStore = defineStore('profile', {
     loading: false,
     error: null
   }),
-  getters: {
-    getProfile: state => state.profile,
-  },
+  getters: {},
   actions: {
     async fetchProfile() {
       this.profile = {}

@@ -1,23 +1,30 @@
 <script setup>
+import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRepoStore } from '@/store/useRepo'
+import useDateTime from '@/hooks/datetime'
 
 // Store
 const repoStore = useRepoStore()
-const { repos } = storeToRefs(repoStore)
+const { repos, error, loading } = storeToRefs(repoStore)
 
-function getDate(dateString) {
-    const date = new Date(dateString);
-    return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
-}
+// date-time hook init
+const { getDate } = useDateTime()
+
+onMounted(() => {
+    //Get Data
+    repoStore.fetchRepos()
+}) 
 </script>
 
 <template>
     <div class="repo-list">
+        <div v-if="loading">loading...</div>
+        <div v-if="error">{{ error.message }}</div>
         <div v-if="repos">
             <router-link
-                class="repo" v-for="(repo, index) in repos"
-                :key="index" :to="{ name: 'detail', params: { id: index } }">
+                class="repo" v-for="repo in repos"
+                :key="repo.id" :to="{ name: 'detail', params: { id: repo.name } }">
                 <div class="repo__info">
                     <span class="folder-icon">🗂</span>
                     <p class="folder-name">{{ repo.name }}</p>
