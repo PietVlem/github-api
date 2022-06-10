@@ -1,9 +1,13 @@
 <script setup>
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useRepoStore } from '@/store/useRepo'
 import ContentLayout from '@/layouts/ContentLayout.vue';
 import useDateTime from '@/hooks/datetime'
+
+/*Declaire vars*/
+const search = ref('')
 
 // Store
 const route = useRoute()
@@ -19,6 +23,13 @@ const { getDate } = useDateTime()
 function editMessage(msg) {
   return msg.indexOf('\n\n') !== -1 ? msg.substring(0, msg.indexOf('\n\n')) : msg
 }
+
+function updateSeachState() {
+  repoStore.$patch({
+    searchVal: search.value
+  })
+}
+
 </script>
 
 <template>
@@ -27,10 +38,10 @@ function editMessage(msg) {
   <ContentLayout v-if="repoCommits" :title="repo.name" pageClass="detail-page" branch="true">
     <div class="commits-head">
       <h3 class="commits-head__title">All commits:</h3>
-      <input class="commits-head__search" type="text" placeholder="Search...">
+      <input v-model="search" @input="updateSeachState()" class="commits-head__search" type="text" placeholder="Search...">
     </div>
     <div class="commits-list">
-      <div class="commit" v-for="commit in repoCommits" :key="commit.node_id">
+      <div class="commit" v-for="commit in repoStore.filteredCommits" :key="commit.node_id">
         <span>🔀</span>
         <div class="commit__info">
           <p>{{ editMessage(commit.commit.message) }}</p>
