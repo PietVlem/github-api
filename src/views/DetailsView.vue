@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useRepoStore } from '@/store/useRepo'
@@ -8,6 +8,7 @@ import useDateTime from '@/hooks/datetime'
 
 /*Declaire vars*/
 const search = ref('')
+let timer = undefined
 
 // Store
 const route = useRoute()
@@ -30,6 +31,28 @@ function updateSeachState() {
   })
 }
 
+function handleScroll() {
+  clearTimeout(timer)
+
+  timer = setTimeout(() => {
+    const listEl = document.querySelector('.commits-list');
+    if (document.documentElement.clientHeight - listEl.getBoundingClientRect().bottom > 0
+      && !repoStore.allCommitsFetched
+      && search.value === ''
+      && !loading.value) {
+      console.log('fetching new commits ...')
+      repoStore.fetchNextCommitsPage(route.params.id)
+    }
+  }, 500)
+}
+
+onMounted(() => {
+  document.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('scroll', handleScroll);
+})
 </script>
 
 <template>
@@ -38,7 +61,8 @@ function updateSeachState() {
   <ContentLayout v-if="repoCommits" :title="repo.name" pageClass="detail-page" branch="true">
     <div class="commits-head">
       <h3 class="commits-head__title">All commits:</h3>
-      <input v-model="search" @input="updateSeachState()" class="commits-head__search" type="text" placeholder="Search...">
+      <input v-model="search" @input="updateSeachState()" class="commits-head__search" type="text"
+        placeholder="Search...">
     </div>
     <div class="commits-list">
       <div class="commit" v-for="commit in repoStore.filteredCommits" :key="commit.node_id">

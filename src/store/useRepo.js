@@ -10,9 +10,13 @@ export const useRepoStore = defineStore('repo', {
     error: null
   }),
   getters: {
-    filteredCommits(state) {
-      return state.repoCommits.filter(el => el.commit.message.toLowerCase().includes(state.searchVal.toLowerCase()))
-    } 
+    filteredCommits: (state) => state.repoCommits.filter(el => el.commit.message.toLowerCase().includes(state.searchVal.toLowerCase())),
+    allCommitsFetched: (state) => {
+      let boolean = false
+      if (state.repoCommits.length) boolean = state.repoCommits[state.repoCommits.length - 1].parents.length ? false : true
+      return boolean
+    },
+    currentCommitsPage: (state) => Math.ceil(state.repoCommits.length / 20)
   },
   actions: {
     async fetchRepos() {
@@ -35,6 +39,18 @@ export const useRepoStore = defineStore('repo', {
           .then((response) => response.json())
         this.repoCommits = await fetch(`https://api.github.com/repos/PietVlem/${name}/commits?per_page=20`)
           .then((response) => response.json())
+      } catch (error) {
+        this.error = error
+      } finally {
+        this.loading = false
+      }
+    },
+    async fetchNextCommitsPage(name) {
+      this.loading = true
+      try {
+        const commitsNextPage = await fetch(`https://api.github.com/repos/PietVlem/${name}/commits?per_page=20&page=${this.currentCommitsPage + 1}`)
+          .then((response) => response.json())
+        this.repoCommits = [...this.repoCommits, ...commitsNextPage]
       } catch (error) {
         this.error = error
       } finally {
