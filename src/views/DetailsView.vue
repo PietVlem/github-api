@@ -60,7 +60,7 @@ onUnmounted(() => {
 <template>
   <div v-if="loading">loading...</div>
   <div v-if="error">{{ error.message }}</div>
-  <ContentLayout v-if="repoCommits.length" :title="repo.name" pageClass="detail-page" branch="true">
+  <ContentLayout v-if="repoCommits.length" :title="repo.name" pageClass="detail-page" :branch=true>
     <div class="commits-head">
       <h3 class="commits-head__title">All commits:</h3>
       <input v-model="search" @input="updateSeachState()" class="commits-head__search" type="text"
