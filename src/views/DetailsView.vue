@@ -3,7 +3,8 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useRepoStore } from '@/store/useRepo'
-import ContentLayout from '@/layouts/ContentLayout.vue';
+import ContentLayout from '@/layouts/ContentLayout.vue'
+import CommitListRow from '@/components/CommitListRow.vue'
 import useDateTime from '@/hooks/datetime'
 
 /*Declaire vars*/
@@ -35,6 +36,7 @@ function handleScroll() {
   clearTimeout(timer)
 
   timer = setTimeout(() => {
+    // Fetch more commits when all commits are in the viewport
     const listEl = document.querySelector('.commits-list');
     if (document.documentElement.clientHeight - listEl.getBoundingClientRect().bottom > 0
       && !repoStore.allCommitsFetched
@@ -65,27 +67,11 @@ onUnmounted(() => {
         placeholder="Search...">
     </div>
     <div class="commits-list">
-      <div class="commit" v-for="commit in repoStore.filteredCommits" :key="commit.node_id">
-        <span>🔀</span>
-        <div class="commit__info">
-          <p>{{ editMessage(commit.commit.message) }}</p>
-          <div class="meta">
-            <span>{{ commit.commit.author.name }} committed on: {{ getDate(commit.commit.author.date) }}</span>
-          </div>
-        </div>
-      </div>
-      <div v-if="!repoStore.filteredCommits.length" class="commit">
-        <span>🙅‍♀️</span>
-        <div class="commit__info">
-          <p>No commits found</p>
-        </div>
-      </div>
-      <div v-if="loading" class="commit">
-        <span>🔄</span>
-        <div class="commit__info">
-          <p class="text-cyan-600">Fetching more commits...</p>
-        </div>
-      </div>
+      <CommitListRow v-for="commit in repoStore.filteredCommits" :key="commit.node_id" icon="🔀"
+        :text="editMessage(commit.commit.message)"
+        :meta="`${commit.commit.author.name} committed on: ${getDate(commit.commit.author.date)}`" />
+      <CommitListRow v-if="!repoStore.filteredCommits.length" icon="🙅‍♀️" text="No commits found" />
+      <CommitListRow v-if="loading" icon="🔄" text="Fetching more commits..." classes="text-cyan-600" />
     </div>
   </ContentLayout>
 </template>
