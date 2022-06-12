@@ -1,9 +1,8 @@
 # github-api
 
 ## Url
-```
 [Netlify](https://rad-chimera-ee8982.netlify.app)
-```
+
 
 ## Project setup
 ```
