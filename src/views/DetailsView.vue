@@ -74,6 +74,18 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
+      <div v-if="!repoStore.filteredCommits.length" class="commit">
+        <span>🙅‍♀️</span>
+        <div class="commit__info">
+          <p>No commits found</p>
+        </div>
+      </div>
+      <div v-if="loading" class="commit">
+        <span>🔄</span>
+        <div class="commit__info">
+          <p class="text-cyan-600">Fetching more commits...</p>
+        </div>
+      </div>
     </div>
   </ContentLayout>
 </template>
