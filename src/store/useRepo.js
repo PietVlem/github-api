@@ -5,6 +5,7 @@ export const useRepoStore = defineStore('repo', {
     repos: [],
     repo: null,
     repoCommits: [],
+    commitsPerPage: 20,
     searchVal: '',
     loading: false,
     error: null
@@ -37,7 +38,7 @@ export const useRepoStore = defineStore('repo', {
       try {
         this.repo = await fetch(`https://api.github.com/repos/PietVlem/${name}`)
           .then((response) => response.json())
-        this.repoCommits = await fetch(`https://api.github.com/repos/PietVlem/${name}/commits?per_page=20`)
+        this.repoCommits = await fetch(`https://api.github.com/repos/PietVlem/${name}/commits?per_page=${this.commitsPerPage}`)
           .then((response) => response.json())
       } catch (error) {
         this.error = error
@@ -48,7 +49,7 @@ export const useRepoStore = defineStore('repo', {
     async fetchNextCommitsPage(name) {
       this.loading = true
       try {
-        const commitsNextPage = await fetch(`https://api.github.com/repos/PietVlem/${name}/commits?per_page=20&page=${this.currentCommitsPage + 1}`)
+        const commitsNextPage = await fetch(`https://api.github.com/repos/PietVlem/${name}/commits?per_page=${this.commitsPerPage}&page=${this.currentCommitsPage + 1}`)
           .then((response) => response.json())
         this.repoCommits = [...this.repoCommits, ...commitsNextPage]
       } catch (error) {
@@ -56,6 +57,14 @@ export const useRepoStore = defineStore('repo', {
       } finally {
         this.loading = false
       }
+    },
+    resetActiveRepo() {
+      this.repo = null
+      this.repoCommits = []
+    },
+    sortReposOnName() {
+      console.log('sorting...')
+      this.repos.sort((a, b) => b.name.localeCompare(a.name))
     }
   },
 })

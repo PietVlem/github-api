@@ -22,6 +22,11 @@ onMounted(() => {
         <div v-if="loading">loading...</div>
         <div v-if="error">{{ error.message }}</div>
         <div v-if="repos">
+            <div class="filters">
+                <p>Sort on:</p>
+                <button class="button">reset</button>
+                <button @click="repoStore.sortReposOnName" class="button">name</button>
+            </div>
             <router-link
                 class="repo" v-for="repo in repos"
                 :key="repo.id" :to="{ name: 'detail', params: { id: repo.name } }">
