@@ -13,7 +13,7 @@ const { getDate } = useDateTime()
 
 onMounted(() => {
     //Get Data
-    repoStore.fetchRepos()
+    if(!repos.length) repoStore.fetchRepos()
 }) 
 </script>
 
@@ -22,14 +22,18 @@ onMounted(() => {
         <div v-if="loading">loading...</div>
         <div v-if="error">{{ error.message }}</div>
         <div v-if="repos">
-            <div class="filters">
-                <p>Sort on:</p>
-                <button class="button">reset</button>
-                <button @click="repoStore.sortReposOnName" class="button">name</button>
+            <div class="actions">
+                <div class="actions__filters">
+                    <p>Sort on:</p>
+                    <button @click="repoStore.sortReposAsc" class="button">⬆️ Name asc</button>
+                    <button @click="repoStore.sortReposDesc" class="button">⬇️ Name desc</button>
+                </div>
+                <div class="button-wrapper">
+                    <button @click="repoStore.fetchRepos" class="button">🔄 Fetch Repos</button>
+                </div>
             </div>
-            <router-link
-                class="repo" v-for="repo in repos"
-                :key="repo.id" :to="{ name: 'detail', params: { id: repo.name } }">
+            <router-link class="repo" v-for="repo in repos" :key="repo.id"
+                :to="{ name: 'detail', params: { id: repo.name } }">
                 <div class="repo__info">
                     <span class="folder-icon">🗂</span>
                     <p class="folder-name">{{ repo.name }}</p>

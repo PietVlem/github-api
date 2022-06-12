@@ -62,9 +62,11 @@ export const useRepoStore = defineStore('repo', {
       this.repo = null
       this.repoCommits = []
     },
-    sortReposOnName() {
-      console.log('sorting...')
+    sortReposAsc() {
       this.repos.sort((a, b) => b.name.localeCompare(a.name))
+    },
+    sortReposDesc() {
+      this.repos.sort((a, b) => a.name.localeCompare(b.name))
     }
   },
 })

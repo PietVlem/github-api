@@ -1,4 +1,34 @@
 .repo-list {
+    .actions {
+        @apply flex flex-wrap gap-3 justify-between items-center py-4;
+
+        .button {
+            @apply w-full;
+            @apply nm:w-auto;
+        }
+
+        &__filters {
+            @apply w-full flex flex-wrap gap-4 items-center;
+            @apply nm:w-auto;
+
+            p {
+                @apply w-full;
+                @apply nm:w-auto;
+            }
+
+            .button {
+                @apply w-full;
+                @apply md:w-[calc(50%-0.5rem)];
+                @apply nm:w-auto;
+            }
+        }
+
+        .button-wrapper {
+            @apply w-full;
+            @apply nm:w-auto;
+        }
+    }
+
     .repo {
         @apply dt-colors flex justify-between items-center px-6 py-3 border-b border-slate-300;
 
