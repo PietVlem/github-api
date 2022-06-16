@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useRepoStore } from '@/store/useRepo'
 import ContentLayout from '@/layouts/ContentLayout.vue'
 import CommitListRow from '@/components/CommitListRow.vue'
-import useDateTime from '@/hooks/datetime'
+import useDateTime from '@/composables/datetime'
 
 /*Declaire vars*/
 const search = ref('')
@@ -33,18 +33,21 @@ function updateSeachState() {
 }
 
 function handleScroll() {
-  clearTimeout(timer)
+  const listEl = document.querySelector('.commits-list');
 
-  timer = setTimeout(() => {
-    // Fetch more commits when all commits are in the viewport
-    const listEl = document.querySelector('.commits-list');
-    if (document.documentElement.clientHeight - listEl.getBoundingClientRect().bottom > 0
-      && !repoStore.allCommitsFetched
-      && search.value === ''
-      && !loading.value) {
-      repoStore.fetchNextCommitsPage(route.params.id)
-    }
-  }, 500)
+  if (listEl) {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      // Fetch more commits when all commits are in the viewport
+      if (document.documentElement.clientHeight - listEl.getBoundingClientRect().bottom > 0
+        && !repoStore.allCommitsFetched
+        && search.value === ''
+        && !loading.value) {
+        repoStore.fetchNextCommitsPage(route.params.id)
+      }
+    }, 500)
+  }
+
 }
 
 onMounted(() => {

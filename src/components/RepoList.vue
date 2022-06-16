@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRepoStore } from '@/store/useRepo'
-import useDateTime from '@/hooks/datetime'
+import useDateTime from '@/composables/datetime'
 
 // Store
 const repoStore = useRepoStore()
@@ -21,7 +21,7 @@ onMounted(() => {
     <div class="repo-list">
         <div v-if="loading">loading...</div>
         <div v-if="error">{{ error.message }}</div>
-        <div v-if="repos">
+        <div v-if="repos" class="repo-list__inner-wrapper">
             <div class="actions">
                 <div class="actions__filters">
                     <p>Sort on:</p>
