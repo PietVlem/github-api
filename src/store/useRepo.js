@@ -14,7 +14,6 @@ export const useRepoStore = defineStore('repo', {
     filteredCommits: (state) => state.repoCommits.filter(el => el.commit.message.toLowerCase().includes(state.searchVal.toLowerCase())),
     allCommitsFetched: (state) => {
       let boolean = false
-      // if (state.repoCommits.length) boolean = state.repoCommits[state.repoCommits.length - 1].parents.length ? false : true
       if (state.repoCommits.length && !state.repoCommits[state.repoCommits.length - 1].parents.length) boolean = true
       return boolean
     },

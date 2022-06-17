@@ -2,7 +2,6 @@ import { mount, RouterLinkStub } from "@vue/test-utils"
 import { createTestingPinia } from '@pinia/testing'
 import RepoList from '@/components/RepoList.vue'
 
-
 describe("RepoList.vue", () => {
     test('render repo list', () => {
         const repos = [
