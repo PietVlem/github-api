@@ -1,14 +1,36 @@
 // counterStore.spec.ts
 import { setActivePinia, createPinia } from 'pinia'
 import { useRepoStore } from '@/store/useRepo'
-const array = ['']
 
 describe('Counter Store', () => {
     const repos = [{ name: 'repo 2' }, { name: 'repo 3' }, { name: 'repo 1' }]
-    const commits = [{ name: 'commit 2' }, { name: 'commit 3' }, { name: 'commit 1' }]
+    const commits = [
+        { commit: { message: 'commit 1' }, parents: [{ sha: '123' }] },
+        { commit: { message: 'commit 2' }, parents: [{ sha: '456' }] },
+        { commit: { message: 'commit 3' }, parents: [] },
+    ]
 
     beforeEach(() => {
         setActivePinia(createPinia())
+    })
+
+    it('filteredCommits', () => {
+        const repoStore = useRepoStore()
+        repoStore.repoCommits = commits
+        repoStore.searchVal = 'Commit 2'
+        expect(repoStore.filteredCommits).toStrictEqual([{ commit: { message: 'commit 2' }, parents: [{ sha: '456' }] },])
+    })
+
+    it('allCommitsFetched', () => {
+        const repoStore = useRepoStore()
+        repoStore.repoCommits = commits
+        expect(repoStore.allCommitsFetched).toStrictEqual(true)
+    })
+
+    it('currentCommitsPage', () => {
+        const repoStore = useRepoStore()
+        repoStore.repoCommits = commits
+        expect(repoStore.currentCommitsPage).toStrictEqual(1)
     })
 
     it('resetActiveRepo', () => {
